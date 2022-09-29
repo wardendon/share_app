@@ -52,9 +52,6 @@ class _HttpDemoState extends State<ShareList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("All Shares"),
-      ),
       body: _list.isNotEmpty
           ? Center(
               child: ScaledList(

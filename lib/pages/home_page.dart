@@ -7,60 +7,43 @@ import 'package:flutter/material.dart';
 import 'package:share_app/common/config.dart';
 import 'package:share_app/model/notice_resp.dart';
 import 'package:share_app/pages/personal_center.dart';
-import 'package:share_app/utils/SpUtils.dart';
+import 'package:share_app/pages/share_list.dart';
+import 'package:share_app/widget/fancy_tab_bar.dart';
 
 /// 创建时间：2022/9/23
 /// 作者：w2gd
 /// 描述：首页
 
-/// Navbar
 class IndexTab extends StatefulWidget {
   const IndexTab({Key? key}) : super(key: key);
 
   @override
-  State<IndexTab> createState() => _IndexTabState();
+  State<IndexTab> createState() => _IndexTab();
 }
 
-class _IndexTabState extends State<IndexTab> {
+/// Custom BottomAppBar
+class _IndexTab extends State<IndexTab> {
+  int selectedIndex = 1;
+  List containerList = [
+    ShareList(),
+    HomePage(),
+    PersonalCenter(),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
+    return NotificationListener<TabNotification>(
+      onNotification: (tabIndex) {
+        setState(() {
+          selectedIndex = tabIndex.tabIndex;
+        });
+        return true;
+      },
       child: Scaffold(
-        body: TabBarView(
-          children: const [
-            HomePage(),
-            HomePage(),
-            HomePage(),
-            PersonalCenter(),
-          ],
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Theme.of(context).primaryColor,
-          shape: CircularNotchedRectangle(),
-          notchMargin: 8,
-          child: TabBar(
-            tabs: const [
-              Tab(icon: Icon(Icons.home, size: 35), text: '首页'),
-              Tab(icon: Icon(Icons.video_camera_back, size: 35), text: '想法'),
-              Tab(icon: Icon(Icons.share, size: 35), text: '分享'),
-              Tab(icon: Icon(Icons.person, size: 35), text: '我的'),
-            ],
-            unselectedLabelColor: Colors.white,
-            labelColor: Config.primarySwatchColor.shade400,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: Config.primarySwatchColor.shade400,
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: () {
-            SpUtils.clear();
-            setState(() {});
-          },
-          child: const Icon(Icons.add, size: 36),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        backgroundColor: Colors.red,
+        extendBody: true,
+        bottomNavigationBar: FancyTabBar(),
+        body: containerList[selectedIndex],
       ),
     );
   }
@@ -125,20 +108,6 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 25, color: Config.primarySwatchColor[400]),
             ),
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/allShares'),
-              child: Text('AllShares', style: Theme.of(context).textTheme.button),
-            ),
-          ),
-          Text("用户：${SpUtils.getString('nickname')}"),
-          Text("mobile：${SpUtils.getString('mobile')}"),
-          Text("avatar：${SpUtils.getString('avatar')}"),
-          Text("id：${SpUtils.getInt('id')}"),
-          // CircleAvatar(
-          //   radius: 100,
-          //   child: Image.network(''),
-          // ),
         ],
       ),
     );

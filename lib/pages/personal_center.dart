@@ -34,7 +34,7 @@ class _PersonalCenterState extends State<PersonalCenter> {
           ),
           SingleChildScrollView(
             child: Container(
-              margin: const EdgeInsets.fromLTRB(16, 120, 16, 16),
+              margin: const EdgeInsets.fromLTRB(16, 90, 16, 16),
               child: Column(
                 children: [
                   Stack(
@@ -176,5 +176,5 @@ List<Info> infoList = [
   Info(Icons.phone, 'Phone', '+86-${SpUtils.getString('mobile')}'),
   Info(Icons.web, 'Website', 'https://www.w2gd.top'),
   Info(Icons.code, 'Github', 'https://www.wradendon.com'),
-  Info(Icons.calendar_view_day, 'Join Date', '12 September 2022'),
+  // Info(Icons.calendar_view_day, 'Join Date', '12 September 2022'),
 ];
