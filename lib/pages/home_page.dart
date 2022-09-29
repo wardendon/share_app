@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:share_app/common/config.dart';
 import 'package:share_app/model/notice_resp.dart';
 import 'package:share_app/pages/personal_center.dart';
 import 'package:share_app/utils/SpUtils.dart';
@@ -35,24 +36,24 @@ class _IndexTabState extends State<IndexTab> {
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          color: const Color(0xffc0869b),
+          color: Theme.of(context).primaryColor,
           shape: CircularNotchedRectangle(),
           notchMargin: 8,
           child: TabBar(
             tabs: const [
-              Tab(icon: Icon(Icons.home), text: '首页'),
-              Tab(icon: Icon(Icons.video_camera_back), text: '想法'),
-              Tab(icon: Icon(Icons.share), text: '分享'),
-              Tab(icon: Icon(Icons.person), text: '我的'),
+              Tab(icon: Icon(Icons.home, size: 35), text: '首页'),
+              Tab(icon: Icon(Icons.video_camera_back, size: 35), text: '想法'),
+              Tab(icon: Icon(Icons.share, size: 35), text: '分享'),
+              Tab(icon: Icon(Icons.person, size: 35), text: '我的'),
             ],
             unselectedLabelColor: Colors.white,
-            labelColor: Colors.pink,
+            labelColor: Config.primarySwatchColor.shade400,
             indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: Colors.pinkAccent,
+            indicatorColor: Config.primarySwatchColor.shade400,
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color(0xffc0869b),
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () {
             SpUtils.clear();
             setState(() {});
@@ -99,11 +100,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: Text(''),
-      //   centerTitle: true,
-      //   title: Text('Share'),
-      // ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,13 +122,13 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(13.0),
             child: Text(
               '最新公告: $_notice',
-              style: TextStyle(fontSize: 25, color: Colors.pinkAccent),
+              style: TextStyle(fontSize: 25, color: Config.primarySwatchColor[400]),
             ),
           ),
           Center(
             child: ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/allShares'),
-              child: Text('AllShares'),
+              child: Text('AllShares', style: Theme.of(context).textTheme.button),
             ),
           ),
           Text("用户：${SpUtils.getString('nickname')}"),

@@ -4,6 +4,8 @@ import 'package:share_app/pages/login_page.dart';
 import 'package:share_app/pages/share_list.dart';
 import 'package:share_app/utils/SpUtils.dart';
 
+import 'common/themes.dart';
+
 void main() async {
   runApp(const MyApp());
 
@@ -19,9 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Share App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: defaultTheme,
       initialRoute: '/login',
       routes: {
         '/': (context) => const IndexTab(),

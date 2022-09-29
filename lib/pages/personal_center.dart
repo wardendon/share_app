@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_app/common/config.dart';
 
 import '../utils/SpUtils.dart';
 
@@ -19,10 +20,13 @@ class _PersonalCenterState extends State<PersonalCenter> {
       backgroundColor: Colors.indigo.shade100,
       body: Stack(
         children: <Widget>[
-          SizedBox(
+          Container(
             // 背景底图，用媒体查询来自适应高度
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
+            foregroundDecoration: BoxDecoration(
+              color: Config.primarySwatchColor.withOpacity(.45),
+            ),
             child: Image.network(
               'http://img.w2gd.top/up/20220926211720.png',
               fit: BoxFit.fitWidth,
