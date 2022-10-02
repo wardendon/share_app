@@ -1,34 +1,22 @@
-/// 创建时间：2022/9/23
-/// 作者：w2gd
-/// 描述：
-
-class AllSharesResponse {
-  AllSharesResponse({
-    required this.code,
-    required this.msg,
+class ShareListModel {
+  ShareListModel({
     required this.data,
   });
-  late final int code;
-  late final String msg;
-  late final List<Data> data;
+  late final List<ShareListData> data;
 
-  AllSharesResponse.fromJson(Map<String, dynamic> json) {
-    code = json['code'];
-    msg = json['msg'];
-    data = List.from(json['data']).map((e) => Data.fromJson(e)).toList();
+  ShareListModel.fromJson(Map<String, dynamic> json) {
+    data = List.from(json['data']).map((e) => ShareListData.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['code'] = code;
-    _data['msg'] = msg;
     _data['data'] = data.map((e) => e.toJson()).toList();
     return _data;
   }
 }
 
-class Data {
-  Data({
+class ShareListData {
+  ShareListData({
     required this.id,
     required this.userId,
     required this.title,
@@ -61,7 +49,7 @@ class Data {
   late final String auditStatus;
   late final String reason;
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ShareListData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['userId'];
     title = json['title'];
@@ -80,22 +68,22 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['userId'] = userId;
-    _data['title'] = title;
-    _data['createTime'] = createTime;
-    _data['updateTime'] = updateTime;
-    _data['isOriginal'] = isOriginal;
-    _data['author'] = author;
-    _data['cover'] = cover;
-    _data['summary'] = summary;
-    _data['price'] = price;
-    _data['downloadUrl'] = downloadUrl;
-    _data['buyCount'] = buyCount;
-    _data['showFlag'] = showFlag;
-    _data['auditStatus'] = auditStatus;
-    _data['reason'] = reason;
-    return _data;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['userId'] = userId;
+    data['title'] = title;
+    data['createTime'] = createTime;
+    data['updateTime'] = updateTime;
+    data['isOriginal'] = isOriginal;
+    data['author'] = author;
+    data['cover'] = cover;
+    data['summary'] = summary;
+    data['price'] = price;
+    data['downloadUrl'] = downloadUrl;
+    data['buyCount'] = buyCount;
+    data['showFlag'] = showFlag;
+    data['auditStatus'] = auditStatus;
+    data['reason'] = reason;
+    return data;
   }
 }

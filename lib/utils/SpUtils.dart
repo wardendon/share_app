@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// 缓存工具
 class SpUtils {
   SpUtils._internal();
 
   factory SpUtils() => _instance;
 
-  static late final SpUtils _instance = SpUtils._internal();
+  static final SpUtils _instance = SpUtils._internal();
 
   static late SharedPreferences _preferences;
 

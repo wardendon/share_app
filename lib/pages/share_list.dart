@@ -1,8 +1,7 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:share_app/model/shares_list.dart';
+import 'package:share_app/main.dart';
+import 'package:share_app/model/shares_list_model.dart';
+import 'package:share_app/pages/share_detail.dart';
 
 import '../widget/scaled_list.dart';
 
@@ -24,28 +23,19 @@ class _HttpDemoState extends State<ShareList> {
     const Color(0xffc657fb),
     const Color(0xfffb8457),
   ];
-  List _list = [];
+  List<ShareListData> _list = [];
 
   @override
   void initState() {
     super.initState();
-    // _getData();
+    _getList();
   }
 
-  _getData() async {
-    var apiUrl = "http://127.0.0.1:8082/shares/all";
-    var res = await Dio().get(apiUrl);
-
-    AllSharesResponse resp = AllSharesResponse.fromJson(json.decode(res.toString()));
-
-    // print('aaa====> ${result.data["data"][0]["cover"]}');
-
-    // print(json.decode(result.data)["result"]);
-
+  _getList() async {
+    List<dynamic> data = await request.get('shares/all');
+    ShareListModel shareList = ShareListModel.fromJson({'data': data});
     setState(() {
-      // _list = resp.data;
-      _list = res.data["data"];
-      // _list.add(Category(cover: result.data["data"][0].cover, title: '111'));
+      _list = shareList.data;
     });
   }
 
@@ -60,21 +50,27 @@ class _HttpDemoState extends State<ShareList> {
                   return kMixedColors[index % kMixedColors.length];
                 },
                 itemBuilder: (index, selectedIndex) {
-                  final category = _list[index];
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: selectedIndex == index ? 100 : 80,
-                        child: Image.network(_list[index]["cover"]),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        _list[index]["title"],
-                        style: TextStyle(
-                            color: Colors.white, fontSize: selectedIndex == index ? 25 : 20),
-                      )
-                    ],
+                  final share = _list[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) => ShareDetail(id: share.id)));
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: selectedIndex == index ? 100 : 80,
+                          child: Image.network(_list[index].cover),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          _list[index].title,
+                          style: TextStyle(
+                              color: Colors.white, fontSize: selectedIndex == index ? 25 : 20),
+                        )
+                      ],
+                    ),
                   );
                 },
               ),

@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:convert';
-
 import 'package:card_swiper/card_swiper.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:share_app/common/config.dart';
-import 'package:share_app/model/notice_resp.dart';
+import 'package:share_app/main.dart';
+import 'package:share_app/model/notice_model.dart';
 import 'package:share_app/pages/personal_center.dart';
 import 'package:share_app/pages/share_list.dart';
 import 'package:share_app/widget/fancy_tab_bar.dart';
@@ -61,23 +59,19 @@ class _HomePageState extends State<HomePage> {
   String _notice = '';
 
   _getNotice() async {
-    Dio dio = Dio();
-    var apiNotice = "http://127.0.0.1:8082/notice/latest";
-    var res = await dio.get(apiNotice);
+    Map<String, dynamic> data = await request.get('notice/latest');
 
-    NoticeResponse resp = NoticeResponse.fromJson(json.decode(res.toString()));
+    NoticeModel notice = NoticeModel.fromJson(data);
 
-    var notice = resp.data.content;
-    // print('最新通知====> ${notice}');
     setState(() {
-      _notice = notice;
+      _notice = notice.content;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // _getNotice();
+    _getNotice();
   }
 
   @override

@@ -1,13 +1,8 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:share_app/model/login_resp.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../model/user.dart';
-import '../utils/SpUtils.dart';
+import 'package:share_app/main.dart';
+import 'package:share_app/model/user.dart';
+import 'package:share_app/utils/SpUtils.dart';
 
 /// 创建时间：2022/9/23
 /// 作者：w2gd
@@ -33,37 +28,20 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.text = 'wd1212';
   }
 
-  // 递增写入 SharedPreferences 中 key 为 counter 的值
-  Future<void> _saveUserData(User user) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('id', user.id);
-    prefs.setString('mobile', user.mobile);
-    prefs.setString('nickname', user.nickname);
-    prefs.setString('avatar', user.avatar);
-  }
-
   /// 用户登录
   Future _login() async {
-    Dio dio = Dio();
-    var apiLogin = "http://127.0.0.1:10001/api/v1/users/login";
+    var data = await request.post('users/login', data: {"mobile": mobile, "password": password});
 
-    var res = await dio.post(
-      apiLogin,
-      data: {"mobile": mobile, "password": password},
-    );
-    LoginResponse resp = LoginResponse.fromJson(json.decode(res.toString()));
-
-    var code = resp.code;
-
-    if (code == 1) {
-      var user = resp.data;
+    if (data != null) {
+      User user = User.fromJson(data);
       SpUtils.setInt('id', user.id);
       SpUtils.setString('mobile', user.mobile);
       SpUtils.setString('nickname', user.nickname);
       SpUtils.setString('avatar', user.avatar);
-    }
 
-    return code;
+      return 1;
+    }
+    return 0;
   }
 
   @override
