@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:share_app/common/IconFont.dart';
 import 'package:share_app/common/config.dart';
 import 'package:share_app/main.dart';
 import 'package:share_app/model/notice_model.dart';
@@ -102,6 +103,10 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 25, color: Config.primarySwatchColor[400]),
             ),
           ),
+          Icon(IconFont.icon_sousuo, color: Colors.red, size: 40),
+          Icon(IconFont.icon_chongwu),
+          Icon(IconFont.icon_canju),
+          Icon(IconFont.icon_daka),
         ],
       ),
     );

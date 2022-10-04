@@ -129,10 +129,15 @@ class _PersonalCenterState extends State<PersonalCenter> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          SpUtils.getString('nickname') != '' ? "${SpUtils.getString('nickname')}" : '点我登录 >',
-          style: Theme.of(context).textTheme.headline4,
-        ),
+        Container(
+            child: SpUtils.getString('nickname') != ''
+                ? Text("${SpUtils.getString('nickname')}")
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'login');
+                    },
+                    child: Text('点我登录 >', style: Theme.of(context).textTheme.headline4),
+                  )),
         ListTile(
           contentPadding: const EdgeInsets.all(0),
           title: const Text("Flutter Developer"),

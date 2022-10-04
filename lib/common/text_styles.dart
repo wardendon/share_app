@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// FileName text_styles
 /// @Description 文本样式定义
-
+final TextStyle whiteText = TextStyle(color: Colors.white);
 //黑色文字样式
 final TextStyle blackText = TextStyle(color: Colors.black);
 

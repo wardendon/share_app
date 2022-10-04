@@ -164,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                       });
                       _login().then((value) {
                         if (value == 1) {
-                          Navigator.pushNamed(context, '/');
+                          Navigator.pushNamed(context, 'index');
                         } else {
                           debugPrint('失败');
                         }

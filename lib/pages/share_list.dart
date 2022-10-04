@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_app/common/text_styles.dart';
 import 'package:share_app/main.dart';
 import 'package:share_app/model/shares_list_model.dart';
 import 'package:share_app/pages/share_detail.dart';
@@ -64,10 +65,14 @@ class _HttpDemoState extends State<ShareList> {
                           child: Image.network(_list[index].cover),
                         ),
                         const SizedBox(height: 15),
-                        Text(
-                          _list[index].title,
-                          style: TextStyle(
-                              color: Colors.white, fontSize: selectedIndex == index ? 25 : 20),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _list[index].title,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white, fontSize: selectedIndex == index ? 25 : 20),
+                          ),
                         )
                       ],
                     ),
@@ -75,7 +80,7 @@ class _HttpDemoState extends State<ShareList> {
                 },
               ),
             )
-          : const Text("加载中..."),
+          : Center(child: Text("加载中...", style: incorrectMessageStyle.copyWith(fontSize: 40))),
     );
   }
 }

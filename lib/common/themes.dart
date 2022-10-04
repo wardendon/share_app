@@ -15,6 +15,7 @@ final ThemeData defaultTheme = buildDefaultTheme();
 
 ThemeData buildDefaultTheme() {
   return ThemeData(
+    // useMaterial3: true,
     primarySwatch: Config.primarySwatchColor,
     primaryColor: Config.primaryColor,
     scaffoldBackgroundColor: bgColor,
