@@ -2,10 +2,10 @@ class ShareListModel {
   ShareListModel({
     required this.data,
   });
-  late final List<ShareListData> data;
+  late final List<ShareListItem> data;
 
   ShareListModel.fromJson(Map<String, dynamic> json) {
-    data = List.from(json['data']).map((e) => ShareListData.fromJson(e)).toList();
+    data = List.from(json['data']).map((e) => ShareListItem.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -15,8 +15,8 @@ class ShareListModel {
   }
 }
 
-class ShareListData {
-  ShareListData({
+class ShareListItem {
+  ShareListItem({
     required this.id,
     required this.userId,
     required this.title,
@@ -49,7 +49,7 @@ class ShareListData {
   late final String auditStatus;
   late final String reason;
 
-  ShareListData.fromJson(Map<String, dynamic> json) {
+  ShareListItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['userId'];
     title = json['title'];

@@ -13,6 +13,7 @@ Request request = Request();
 void main() async {
   request.init(
     baseUrl: 'http://api.w2gd.top:10001/api/v1/',
+    // baseUrl: 'http://localhost:10001/api/v1/',
     responseFormat: HttpResponseFormat('code', 'data', 'msg', '1'),
   );
   WidgetsFlutterBinding.ensureInitialized();

@@ -24,7 +24,7 @@ class _HttpDemoState extends State<ShareList> {
     const Color(0xffc657fb),
     const Color(0xfffb8457),
   ];
-  List<ShareListData> _list = [];
+  List<ShareListItem> _list = [];
 
   @override
   void initState() {
