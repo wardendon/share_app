@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:share_app/main.dart';
-import 'package:share_app/model/user.dart';
-import 'package:share_app/utils/SpUtils.dart';
+
+import '../model/user.dart';
+import '../utils/SpUtils.dart';
+import '../widget/beautiful_alert_dialog.dart';
 
 /// 创建时间：2022/9/23
 /// 作者：w2gd
@@ -29,19 +31,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   /// 用户登录
-  Future _login() async {
-    var data = await request.post('users/login', data: {"mobile": mobile, "password": password});
+  Future<void> _login() async {
+    var res = await request.post('users/login', data: {"mobile": mobile, "password": password});
 
-    if (data != null) {
+    SpUtils.setString('token', res['token']);
+    SpUtils.setInt('id', res['id']);
+
+    /// 获取用户信息并存储
+    request.get('users/${res['id']}', headers: {'X-Token': res['token']}).then((data) {
+      // print(data);
       User user = User.fromJson(data);
       SpUtils.setInt('id', user.id);
       SpUtils.setString('mobile', user.mobile);
+      SpUtils.setString('roles', user.roles);
       SpUtils.setString('nickname', user.nickname);
       SpUtils.setString('avatar', user.avatar);
-
-      return 1;
-    }
-    return 0;
+    });
   }
 
   @override
@@ -145,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                           padding: const EdgeInsets.all(8),
                           child: TextField(
                             controller: passwordController,
+                            obscureText: true, // 隐藏输入
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Password",
@@ -162,12 +168,21 @@ class _LoginPageState extends State<LoginPage> {
                         mobile = mobileController.text;
                         password = passwordController.text;
                       });
-                      _login().then((value) {
-                        if (value == 1) {
-                          Navigator.pushNamed(context, 'index');
-                        } else {
-                          debugPrint('失败');
-                        }
+                      _login().then((_) {
+                        Navigator.pushNamed(context, 'index');
+                      }).catchError((e) {
+                        showDialog(
+                          context: context,
+                          builder: (_) => BeautifulAlertDialog(
+                            title: '错误！',
+                            tip: '请输入正确的账号与密码',
+                            tapOk: () {
+                              setState(() {
+                                passwordController.text = '';
+                              });
+                            },
+                          ),
+                        );
                       });
                     },
                     child: Container(

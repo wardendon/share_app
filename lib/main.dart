@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_app/pages/audit_page.dart';
 import 'package:share_app/pages/home_page.dart';
 import 'package:share_app/pages/login_page.dart';
 import 'package:share_app/utils/SpUtils.dart';
@@ -7,13 +8,12 @@ import 'package:share_app/utils/request.dart';
 import 'common/themes.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 Request request = Request();
 
 void main() async {
   request.init(
-    baseUrl: 'http://api.w2gd.top:10001/api/v1/',
-    // baseUrl: 'http://localhost:10001/api/v1/',
+    // baseUrl: 'http://api.w2gd.top:10001/api/v1/',
+    baseUrl: 'http://localhost:10001/api/v1/',
     responseFormat: HttpResponseFormat('code', 'data', 'msg', '1'),
   );
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,6 +50,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         return const IndexTab();
       case "login":
         return const LoginPage();
+      case "audit":
+        return const AuditPage();
       default:
         return const Scaffold(
           body: Center(

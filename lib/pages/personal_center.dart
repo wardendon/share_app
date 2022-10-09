@@ -131,18 +131,16 @@ class _PersonalCenterState extends State<PersonalCenter> {
       children: <Widget>[
         Container(
             child: SpUtils.getString('nickname') != ''
-                ? Text("${SpUtils.getString('nickname')}")
+                ? Text("${SpUtils.getString('nickname')}",
+                    style: Theme.of(context).textTheme.headline4)
                 : GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, 'login');
                     },
                     child: Text('点我登录 >', style: Theme.of(context).textTheme.headline4),
                   )),
-        ListTile(
-          contentPadding: const EdgeInsets.all(0),
-          title: const Text("Flutter Developer"),
-          subtitle: Text("${SpUtils.getString('nickname')}"),
-        ),
+        Text(SpUtils.getString('roles') == 'admin' ? '管理员' : '用户'),
+        const SizedBox(height: 10),
       ],
     );
   }

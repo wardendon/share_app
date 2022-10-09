@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:share_app/common/text_styles.dart';
 import 'package:share_app/main.dart';
 import 'package:share_app/model/shares_list_model.dart';
@@ -9,7 +10,6 @@ import '../widget/scaled_list.dart';
 class ShareList extends StatefulWidget {
   const ShareList({Key? key, this.title}) : super(key: key);
   final String? title;
-
   @override
   State<ShareList> createState() => _HttpDemoState();
 }
@@ -43,6 +43,12 @@ class _HttpDemoState extends State<ShareList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Text(''),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+      ),
       body: _list.isNotEmpty
           ? Center(
               child: ScaledList(

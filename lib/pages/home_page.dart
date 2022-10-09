@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:share_app/common/config.dart';
 import 'package:share_app/pages/personal_center.dart';
-import 'package:share_app/pages/test_page.dart';
+import 'package:share_app/pages/share_list.dart';
 import 'package:share_app/widget/fancy_tab_bar.dart';
 
+import '../utils/SpUtils.dart';
 import '../widget/shares_grid.dart';
 
 /// 创建时间：2022/9/23
@@ -21,8 +23,7 @@ class IndexTab extends StatefulWidget {
 class _IndexTab extends State<IndexTab> {
   int selectedIndex = 1;
   List containerList = [
-    TestPage(),
-    // ShareList(),
+    ShareList(),
     HomePage(),
     PersonalCenter(),
   ];
@@ -63,7 +64,23 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SharesGrid(),
+      body: Stack(
+        children: [
+          SharesGrid(),
+          Positioned(
+              right: 20,
+              bottom: MediaQuery.of(context).size.height / 2,
+              child: Offstage(
+                offstage: SpUtils.getString('roles') != 'admin',
+                child: FloatingActionButton(
+                  backgroundColor: Config.primaryColor,
+                  elevation: 10,
+                  onPressed: () => Navigator.pushNamed(context, 'audit'),
+                  child: Icon(Icons.eject, size: 40),
+                ),
+              ))
+        ],
+      ),
     );
   }
 }
@@ -75,6 +92,9 @@ List swiperList = <Advertising>[
   Advertising(
       adUrl: 'https://pub.dev/packages/card_swiper',
       imgUrl: 'http://img.w2gd.top/up/20220921211845.png'),
+  Advertising(
+      adUrl: 'https://pub.dev/packages/card_swiper',
+      imgUrl: 'http://img.w2gd.top/up/iTab-pkr6ve.png'),
 ];
 
 class Advertising {

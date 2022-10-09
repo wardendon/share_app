@@ -1,25 +1,77 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:share_app/widget/notice_roll.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share_app/common/config.dart';
+import 'package:share_app/common/text_styles.dart';
+import 'package:share_app/pages/share_detail.dart';
 
 import '../main.dart';
 import '../model/shares_list_model.dart';
-import '../pages/home_page.dart';
-import '../pages/share_detail.dart';
 
-class SharesGrid extends StatefulWidget {
-  const SharesGrid({Key? key}) : super(key: key);
+class AuditPage extends StatefulWidget {
+  const AuditPage({Key? key}) : super(key: key);
 
   @override
-  State<SharesGrid> createState() => _SharesGridState();
+  State<AuditPage> createState() => _AuditPageState();
 }
 
-class _SharesGridState extends State<SharesGrid> {
+class _AuditPageState extends State<AuditPage> {
+  final tabs = ['待审核', '已通过', '未通过'];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: tabs.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('审核', style: whiteText),
+          bottom: _buildTabBar(),
+          centerTitle: true,
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+        body: TabBarView(children: const <Widget>[
+          AuditStatusList(status: 'NOT_YET'),
+          AuditStatusList(status: 'PASS'),
+          AuditStatusList(status: 'REJECT'),
+        ]),
+      ),
+    );
+  }
+
+  _buildTabBar() => TabBar(
+        labelStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontSize: 19),
+        labelColor: Colors.white,
+        indicatorWeight: 4,
+        indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+        unselectedLabelColor: Config.primarySwatchColor.shade50,
+        indicatorColor: Config.primarySwatchColor.shade50,
+        indicatorSize: TabBarIndicatorSize.tab,
+        tabs: tabs.map((e) => Tab(text: e)).toList(),
+      );
+}
+
+/// 审核状态列表
+class AuditStatusList extends StatefulWidget {
+  final String status;
+  const AuditStatusList({Key? key, required this.status}) : super(key: key);
+
+  @override
+  State<AuditStatusList> createState() => _AuditStatusListState();
+}
+
+class _AuditStatusListState extends State<AuditStatusList> {
   /// 刷新控制器，初始化刷新为false，自定义初始化在 initState 中
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
@@ -32,7 +84,8 @@ class _SharesGridState extends State<SharesGrid> {
 
   /// 请求shares列表
   Future<List<ShareListItem>> contentList() async {
-    var data = await request.get('shares/page-shares?pageNum=$pageNum&pageSize=$pageSize');
+    var data = await request
+        .get('shares/audit-status?pageNum=$pageNum&pageSize=$pageSize&status=${widget.status}');
 
     ShareListModel shareList = ShareListModel.fromJson({'data': data['content']});
 
@@ -79,12 +132,6 @@ class _SharesGridState extends State<SharesGrid> {
     _refreshController.loadComplete();
   }
 
-  _launchUrl(u) async {
-    if (!await launchUrl(Uri.parse(u))) {
-      throw 'Could not launch $u';
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -113,50 +160,30 @@ class _SharesGridState extends State<SharesGrid> {
               onRefresh: _onRefresh,
               onLoading: _onLoading,
               child: ListView.builder(
-                itemCount: contents.length + 1,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    /// 轮播与公告
-                    return Column(
-                      children: [
-                        SizedBox(
-                          height: 300,
-                          child: Swiper(
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () => _launchUrl(swiperList[index].adUrl),
-                                child: Image.network(
-                                  swiperList[index].imgUrl,
-                                  fit: BoxFit.fill,
-                                ),
-                              );
-                            },
-                            itemCount: swiperList.length,
-                            pagination: SwiperPagination(),
-                            control: SwiperControl(),
-                            autoplay: true,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                          child: NoticeRoll(),
-                        ),
-                      ],
-                    );
-                  } else {
+                  itemCount: contents.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ShareDetail(id: contents[index - 1].id)));
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) => ShareDetail(id: contents[index].id)))
+                            .then((value) {
+                          setState(() {
+                            if (value) {
+                              // print('页面刷新～～·');
+                              _onRefresh();
+                            }
+                          });
+                        });
                       },
                       child: Container(
                         height: 200,
-                        margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
+                        margin: EdgeInsets.all(10),
                         padding: EdgeInsets.all(1),
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('assets/images/box${(index - 1) % 4}.png'),
+                              image: AssetImage('assets/images/box${index % 4}.png'),
                               fit: BoxFit.fill),
                         ),
                         child: Padding(
@@ -171,13 +198,13 @@ class _SharesGridState extends State<SharesGrid> {
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text(
-                                      contents[index - 1].title,
+                                      contents[index].title,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(color: Colors.white, fontSize: 20),
                                     ),
                                     Text(
-                                      contents[index - 1].summary,
+                                      contents[index].summary,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 3,
                                       softWrap: true,
@@ -194,7 +221,7 @@ class _SharesGridState extends State<SharesGrid> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Image.network(
-                                          contents[index - 1].cover,
+                                          contents[index].cover,
                                           fit: BoxFit.cover,
                                         )
                                       ],
@@ -203,13 +230,13 @@ class _SharesGridState extends State<SharesGrid> {
                                       right: 0,
                                       child: ElevatedButton(
                                         style: TextButton.styleFrom(
-                                          backgroundColor: contents[index - 1].isOriginal == 1
+                                          backgroundColor: contents[index].isOriginal == 1
                                               ? Colors.orangeAccent
                                               : Colors.green,
                                           elevation: 8,
                                         ),
                                         onPressed: () {},
-                                        child: contents[index - 1].isOriginal == 1
+                                        child: contents[index].isOriginal == 1
                                             ? Text('原创', style: TextStyle(color: Colors.white))
                                             : Text('转载', style: TextStyle(color: Colors.white)),
                                       ),
@@ -218,7 +245,7 @@ class _SharesGridState extends State<SharesGrid> {
                                       bottom: 0,
                                       right: 0,
                                       child: Text(
-                                        '${contents[index - 1].price}积分',
+                                        '${contents[index].price}积分',
                                         style: TextStyle(color: Colors.pink, fontSize: 20),
                                       ),
                                     )
@@ -230,9 +257,7 @@ class _SharesGridState extends State<SharesGrid> {
                         ),
                       ),
                     );
-                  }
-                },
-              ),
+                  }),
             ),
           );
         } else {
