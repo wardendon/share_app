@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:share_app/pages/audit_page.dart';
+import 'package:share_app/pages/edit_info_page.dart';
 import 'package:share_app/pages/home_page.dart';
 import 'package:share_app/pages/login_page.dart';
+import 'package:share_app/pages/setting_page.dart';
 import 'package:share_app/utils/SpUtils.dart';
 import 'package:share_app/utils/request.dart';
 
@@ -12,8 +14,9 @@ Request request = Request();
 
 void main() async {
   request.init(
-    // baseUrl: 'http://api.w2gd.top:10001/api/v1/',
-    baseUrl: 'http://localhost:10001/api/v1/',
+    // baseUrl: 'http://api.w2gd.top:10001/api/v1/', // 远程环境
+    baseUrl: 'http://localhost:10001/api/v1/', // 本地环境
+    // baseUrl: 'https://875c-221-226-155-12.jp.ngrok.io/api/v1/', // 内网地址穿透
     responseFormat: HttpResponseFormat('code', 'data', 'msg', '1'),
   );
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +55,10 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
         return const LoginPage();
       case "audit":
         return const AuditPage();
+      case "setting":
+        return const SettingPage();
+      case "edit":
+        return const EditInfoPage();
       default:
         return const Scaffold(
           body: Center(
@@ -63,8 +70,8 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
 }
 
 String? routeBeforeHook(RouteSettings settings) {
-  final id = SpUtils.getInt('id') ?? 0;
-  if (id != 0) {
+  final String token = SpUtils.getString('token') ?? '';
+  if (token != '') {
     if (settings.name == 'login') {
       return 'index';
     }

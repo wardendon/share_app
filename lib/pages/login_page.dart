@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     mobileController.text = '17314433312';
-    passwordController.text = 'wd1212';
+    passwordController.text = '123123';
   }
 
   /// 用户登录
@@ -46,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
       SpUtils.setString('roles', user.roles);
       SpUtils.setString('nickname', user.nickname);
       SpUtils.setString('avatar', user.avatar);
+      SpUtils.setInt('bonus', user.bonus);
     });
   }
 

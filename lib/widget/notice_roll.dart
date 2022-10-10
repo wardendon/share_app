@@ -21,8 +21,7 @@ class _NoticeRollState extends State<NoticeRoll> {
 
   /// 获取公告列表
   _getNoticeList() async {
-    Map<String, dynamic> data =
-        await request.get('http://127.0.0.1:8084/notice/page-notices?pageNum=0&pageSize=2');
+    Map<String, dynamic> data = await request.get('notice/page-notices?pageNum=0&pageSize=2');
 
     NoticeListModel noticeList = NoticeListModel.fromJson({'content': data["content"]});
     setState(() {

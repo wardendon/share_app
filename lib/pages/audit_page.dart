@@ -35,6 +35,7 @@ class _AuditPageState extends State<AuditPage> {
       length: tabs.length,
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(color: Colors.white),
           title: Text('审核', style: whiteText),
           bottom: _buildTabBar(),
           centerTitle: true,

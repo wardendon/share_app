@@ -12,12 +12,33 @@ class PersonalCenter extends StatefulWidget {
 }
 
 class _PersonalCenterState extends State<PersonalCenter> {
+  List<Info> infoList = [
+    Info(Icons.phone, 'Phone', '+86-${SpUtils.getString('mobile')}'),
+    Info(Icons.code, 'Github', 'https://www.wardendon.com'),
+  ];
   @override
   Widget build(BuildContext context) {
     SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.dark);
     return Scaffold(
-      backgroundColor: Colors.indigo.shade100,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: const Text(''),
+        actions: [
+          const Icon(Icons.dark_mode_outlined),
+          // Icon(Icons.dark_mode),
+          const SizedBox(width: 10),
+          InkWell(
+              onTap: () => Navigator.pushNamed(context, 'setting').then((_) {
+                    setState(() {});
+                  }),
+              child: const Icon(Icons.settings_outlined)),
+          const SizedBox(width: 20)
+        ],
+        actionsIconTheme: IconThemeData(color: Config.primarySwatchColor.shade400, size: 30),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       body: Stack(
         children: <Widget>[
           Container(
@@ -59,19 +80,22 @@ class _PersonalCenterState extends State<PersonalCenter> {
                         ),
                       ),
                       // 头像
-                      Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: NetworkImage(SpUtils.getString('avatar') != ''
-                                ? '${SpUtils.getString('avatar')}'
-                                : 'http://img.w2gd.top/up/user.png'),
-                            fit: BoxFit.cover,
+                      Hero(
+                        tag: 'avatar',
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(SpUtils.getString('avatar') != ''
+                                  ? '${SpUtils.getString('avatar')}'
+                                  : 'http://img.w2gd.top/up/user.png'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
+                          margin: const EdgeInsets.only(left: 16),
                         ),
-                        margin: const EdgeInsets.only(left: 16),
                       ),
                     ],
                   ),
@@ -92,8 +116,9 @@ class _PersonalCenterState extends State<PersonalCenter> {
                           leading: const Icon(Icons.person),
                           trailing: GestureDetector(
                               onTap: () {
-                                SpUtils.clear();
-                                setState(() {});
+                                Navigator.pushNamed(context, 'edit').then((_) {
+                                  setState(() {});
+                                });
                               },
                               child: const Icon(Icons.exit_to_app, size: 40)),
                         ),
@@ -159,7 +184,7 @@ class _PersonalCenterState extends State<PersonalCenter> {
         )),
         Expanded(
             child: Column(
-          children: const [Text('14514'), Text('Favourites')],
+          children: [Text('${SpUtils.getInt('bonus')}'), Text('Bonus')],
         ))
       ],
     );
@@ -173,11 +198,3 @@ class Info {
   String subTitle;
   Info(this.icon, this.title, this.subTitle);
 }
-
-List<Info> infoList = [
-  Info(Icons.email, 'Email', 'w2gdong@gmail.com'),
-  Info(Icons.phone, 'Phone', '+86-${SpUtils.getString('mobile')}'),
-  Info(Icons.web, 'Website', 'https://www.w2gd.top'),
-  Info(Icons.code, 'Github', 'https://www.wradendon.com'),
-  // Info(Icons.calendar_view_day, 'Join Date', '12 September 2022'),
-];

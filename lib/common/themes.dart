@@ -15,13 +15,14 @@ final ThemeData defaultTheme = buildDefaultTheme();
 
 ThemeData buildDefaultTheme() {
   return ThemeData(
-    // useMaterial3: true,
+    useMaterial3: true,
     primarySwatch: Config.primarySwatchColor,
     primaryColor: Config.primaryColor,
     scaffoldBackgroundColor: bgColor,
     appBarTheme: AppBarTheme(
-      //AppBar主题，只是设置了背景色
       backgroundColor: Config.primarySwatchColor.shade300,
+      iconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(inherit: true, color: Colors.white, fontSize: 20),
     ),
     textTheme: TextTheme(button: buttonText), //文本样式
     buttonTheme: ButtonThemeData(
