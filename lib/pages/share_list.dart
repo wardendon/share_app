@@ -44,7 +44,7 @@ class _HttpDemoState extends State<ShareList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Text(''),
+        leading: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,

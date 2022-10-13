@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_app/common/config.dart';
+import 'package:share_app/main.dart';
 
 import '../utils/SpUtils.dart';
 
@@ -12,10 +13,23 @@ class PersonalCenter extends StatefulWidget {
 }
 
 class _PersonalCenterState extends State<PersonalCenter> {
-  List<Info> infoList = [
-    Info(Icons.phone, 'Phone', '+86-${SpUtils.getString('mobile')}'),
-    Info(Icons.code, 'Github', 'https://www.wardendon.com'),
-  ];
+  Future _getBonus() async {
+    var data = await request.get('users/bonus', params: {"id": SpUtils.getInt('id')});
+    return data['bonus'];
+  }
+
+  int bonus = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _getBonus().then((value) {
+      setState(() {
+        bonus = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
@@ -122,20 +136,32 @@ class _PersonalCenterState extends State<PersonalCenter> {
                               },
                               child: const Icon(Icons.exit_to_app, size: 40)),
                         ),
-                        Container(
-                          child: SpUtils.getString('nickname') != ''
-                              ? ListView(
-                                  shrinkWrap: true,
-                                  children: infoList
-                                      .map((info) => SizedBox(
-                                          height: 80,
-                                          child: ListTile(
-                                            title: Text(info.title),
-                                            subtitle: Text(info.subTitle),
-                                            leading: Icon(info.icon),
-                                          )))
-                                      .toList())
-                              : Container(),
+                        const Divider(color: Colors.grey),
+                        // 去除ListView在没有AppBar一起使用时的留白区域
+                        MediaQuery.removePadding(
+                          removeBottom: true,
+                          context: context,
+                          child: Container(
+                            child: SpUtils.getString('token') != ''
+                                ? ListView.separated(
+                                    separatorBuilder: (context, index) => const Divider(
+                                        height: 1, color: Colors.grey, indent: 16, endIndent: 16),
+                                    itemCount: infoList.length,
+                                    itemBuilder: (context, index) => SizedBox(
+                                      height: 63,
+                                      child: ListTile(
+                                        onTap: () {
+                                          Navigator.pushNamed(context, infoList[index].subTitle);
+                                        },
+                                        leading: Icon(infoList[index].icon, size: 30),
+                                        title: Text(infoList[index].title),
+                                        trailing: const Icon(Icons.keyboard_arrow_right, size: 30),
+                                      ),
+                                    ),
+                                    shrinkWrap: true,
+                                  )
+                                : Container(),
+                          ),
                         ),
                       ],
                     ),
@@ -184,7 +210,7 @@ class _PersonalCenterState extends State<PersonalCenter> {
         )),
         Expanded(
             child: Column(
-          children: [Text('${SpUtils.getInt('bonus')}'), Text('Bonus')],
+          children: [Text('$bonus'), const Text('Bonus')],
         ))
       ],
     );
@@ -198,3 +224,9 @@ class Info {
   String subTitle;
   Info(this.icon, this.title, this.subTitle);
 }
+
+List<Info> infoList = [
+  Info(Icons.star_half, '我的兑换', 'exchange'),
+  Info(Icons.support, '积分明细', 'bonus'),
+  Info(Icons.person, '我的投稿', 'my_contribute'),
+];

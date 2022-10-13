@@ -68,17 +68,18 @@ class _HomePageState extends State<HomePage> {
         children: [
           SharesGrid(),
           Positioned(
-              right: 20,
-              bottom: MediaQuery.of(context).size.height / 2,
-              child: Offstage(
-                offstage: SpUtils.getString('roles') != 'admin',
-                child: FloatingActionButton(
-                  backgroundColor: Config.primaryColor,
-                  elevation: 10,
-                  onPressed: () => Navigator.pushNamed(context, 'audit'),
-                  child: Icon(Icons.eject, size: 40),
-                ),
-              ))
+            right: 20,
+            bottom: MediaQuery.of(context).size.height / 2,
+            child: Offstage(
+              offstage: SpUtils.getString('roles') != 'admin',
+              child: FloatingActionButton(
+                backgroundColor: Config.primaryColor,
+                elevation: 10,
+                onPressed: () => Navigator.pushNamed(context, 'audit'),
+                child: Icon(Icons.eject, size: 40, color: Colors.white),
+              ),
+            ),
+          )
         ],
       ),
     );

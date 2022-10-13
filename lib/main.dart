@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:share_app/pages/audit_page.dart';
+import 'package:share_app/pages/bonus_detail_page.dart';
+import 'package:share_app/pages/contributors_page.dart';
 import 'package:share_app/pages/edit_info_page.dart';
+import 'package:share_app/pages/exchange_page.dart';
 import 'package:share_app/pages/home_page.dart';
 import 'package:share_app/pages/login_page.dart';
+import 'package:share_app/pages/my_contributors_page.dart';
 import 'package:share_app/pages/setting_page.dart';
 import 'package:share_app/utils/SpUtils.dart';
 import 'package:share_app/utils/request.dart';
@@ -54,11 +58,19 @@ Route<dynamic> onGenerateRoute(RouteSettings settings) {
       case "login":
         return const LoginPage();
       case "audit":
-        return const AuditPage();
+        return AuditPage();
       case "setting":
         return const SettingPage();
       case "edit":
         return const EditInfoPage();
+      case "exchange":
+        return const ExchangePage();
+      case "my_contribute":
+        return const MyContributorsPage();
+      case "contribute":
+        return const ContributorsPage();
+      case "bonus":
+        return const BonusDetailPage();
       default:
         return const Scaffold(
           body: Center(

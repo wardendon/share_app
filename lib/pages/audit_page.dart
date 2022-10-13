@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_app/common/config.dart';
 import 'package:share_app/common/text_styles.dart';
@@ -10,24 +9,10 @@ import 'package:share_app/pages/share_detail.dart';
 import '../main.dart';
 import '../model/shares_list_model.dart';
 
-class AuditPage extends StatefulWidget {
-  const AuditPage({Key? key}) : super(key: key);
+class AuditPage extends StatelessWidget {
+  AuditPage({Key? key}) : super(key: key);
 
-  @override
-  State<AuditPage> createState() => _AuditPageState();
-}
-
-class _AuditPageState extends State<AuditPage> {
   final tabs = ['待审核', '已通过', '未通过'];
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
