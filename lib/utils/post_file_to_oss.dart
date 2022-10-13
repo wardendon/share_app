@@ -10,10 +10,10 @@ import 'package:path/path.dart';
 /// 描述：上传图片到阿里云OSS
 
 ///阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录RAM控制台创建RAM账号。
-const String OSSAccessKeyId = '**********';
+const String OSSAccessKeyId = '****';
 
 ///用于来生成Signature的
-const String accessKeySecret = '***********';
+const String accessKeySecret = '****';
 
 /// Policy为一段经过UTF-8和Base64编码的JSON文本，声明了Post请求必须满足的条件
 const String policy = '''

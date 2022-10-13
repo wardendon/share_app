@@ -30,6 +30,13 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.text = '123123';
   }
 
+  @override
+  void dispose() {
+    mobileController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   /// 用户登录
   Future<void> _login() async {
     var res = await request.post('users/login', data: {"mobile": mobile, "password": password});

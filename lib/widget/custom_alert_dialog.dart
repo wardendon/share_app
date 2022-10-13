@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// 创建时间：2022/10/10
 /// 作者：w2gd
-/// 描述：
+/// 描述：自定义弹窗
 
 class CustomAlertDialog extends StatelessWidget {
   final AlertDialogType type;
@@ -20,6 +20,7 @@ class CustomAlertDialog extends StatelessWidget {
     fontSize: 16.0,
     color: Colors.white,
   );
+  final VoidCallback? tapOk;
 
   CustomAlertDialog(
       {Key? key,
@@ -27,7 +28,8 @@ class CustomAlertDialog extends StatelessWidget {
       this.content = 'Information to your user describing the situation.',
       this.icon,
       this.type = AlertDialogType.INFO,
-      this.buttonLabel = 'Ok'})
+      this.buttonLabel = 'Ok',
+      this.tapOk})
       : super(key: key);
 
   @override
@@ -85,7 +87,13 @@ class CustomAlertDialog extends StatelessWidget {
                     buttonLabel,
                     style: labelStyle,
                   ),
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: () {
+                    if (tapOk == null) {
+                      Navigator.pop(context, true);
+                    } else {
+                      tapOk!();
+                    }
+                  },
                 ),
               ),
             ],
