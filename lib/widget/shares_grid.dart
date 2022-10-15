@@ -3,6 +3,7 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_app/widget/notice_roll.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -128,7 +129,7 @@ class _SharesGridState extends State<SharesGrid> {
                                 onTap: () => _launchUrl(swiperList[index].adUrl),
                                 child: Image.network(
                                   swiperList[index].imgUrl,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 ),
                               );
                             },
@@ -151,13 +152,14 @@ class _SharesGridState extends State<SharesGrid> {
                             builder: (context) => ShareDetail(id: contents[index - 1].id)));
                       },
                       child: Container(
-                        height: 200,
+                        height: 200.h,
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 20),
-                        padding: EdgeInsets.all(1),
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(30.r)),
                           image: DecorationImage(
-                              image: AssetImage('assets/images/box${(index - 1) % 4}.png'),
-                              fit: BoxFit.fill),
+                            image: AssetImage('assets/images/box${(index - 1) % 4}.png'),
+                            fit: BoxFit.fill,
+                          ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(16),
@@ -174,14 +176,14 @@ class _SharesGridState extends State<SharesGrid> {
                                       contents[index - 1].title,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                                      style: TextStyle(color: Colors.white, fontSize: 23.sp),
                                     ),
                                     Text(
                                       contents[index - 1].summary,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 3,
                                       softWrap: true,
-                                      style: const TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.white, fontSize: 18.sp),
                                     ),
                                   ],
                                 ),
@@ -195,7 +197,9 @@ class _SharesGridState extends State<SharesGrid> {
                                       children: [
                                         Image.network(
                                           contents[index - 1].cover,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fitWidth,
+                                          width: 200.w,
+                                          height: 150.h,
                                         )
                                       ],
                                     ),
@@ -219,7 +223,7 @@ class _SharesGridState extends State<SharesGrid> {
                                       right: 0,
                                       child: Text(
                                         '${contents[index - 1].price}积分',
-                                        style: TextStyle(color: Colors.pink, fontSize: 20),
+                                        style: TextStyle(color: Colors.pink, fontSize: 25.sp),
                                       ),
                                     )
                                   ],

@@ -74,99 +74,101 @@ class _ShareDetailState extends State<ShareDetail> {
             child: Icon(Icons.arrow_back_ios, color: Colors.white)),
         title: Text('Share ${share?.id}', style: whiteText),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Text('${share?.title}', style: TextStyle(fontSize: 30)),
-                ListTile(
-                  title: Text('$nickname'),
-                  leading: avatar != ''
-                      ? Image.network(avatar)
-                      : Image.network('http://img.w2gd.top/up/user.png'),
-                  subtitle: Text('${share?.author}'),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-                  width: MediaQuery.of(context).size.width,
-                  // color: Colors.cyan,
-                  child: Material(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Text('${share?.title}', style: TextStyle(fontSize: 30)),
+                  ListTile(
+                    title: Text('$nickname'),
+                    leading: avatar != ''
+                        ? Image.network(avatar)
+                        : Image.network('http://img.w2gd.top/up/user.png'),
+                    subtitle: Text('${share?.author}'),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                    width: MediaQuery.of(context).size.width,
+                    // color: Colors.cyan,
+                    child: Material(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 8,
+                        child: share?.cover != null
+                            ? Center(child: Image.network('${share?.cover}', fit: BoxFit.fitWidth))
+                            : SizedBox()),
+                  ),
+                  Text('${share?.summary}'),
+                  GestureDetector(
+                    onTap: () => _launchUrl(uri),
+                    child: Text(
+                      '下载链接(点击获取)',
+                      style: linkText.copyWith(fontSize: 23),
+                    ),
+                  ),
+                  Text('密码： $password', style: linkText.copyWith(fontSize: 23)),
+                  SizedBox(height: 30),
+                  Offstage(
+                    offstage: SpUtils.getString('roles') != 'admin',
+                    child: Text('状态：${share?.auditStatus}',
+                        style: TextStyle(fontSize: 25, color: Colors.red)),
+                  ),
+                ],
+              ),
+
+              /// 管理员审核
+              Positioned(
+                bottom: 40,
+                right: 10,
+                child: Offstage(
+                  offstage: SpUtils.getString('roles') != 'admin',
+                  child: Column(
+                    children: [
+                      FloatingActionButton(
+                        heroTag: 'pass',
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (_) => BeautifulAlertDialog(
+                            title: 'PASS',
+                            tip: '点击 Ok 后将提交通过请求',
+                            tapOk: () {
+                              _auditShare('PASS', 'succeed', true)
+                                  .then((_) => Navigator.pop(context, true));
+                            },
+                          ),
+                        ),
+                        backgroundColor: Config.primaryColor,
+                        child: Icon(Icons.done),
                       ),
-                      elevation: 8,
-                      child: share?.cover != null
-                          ? Center(child: Image.network('${share?.cover}', fit: BoxFit.fitWidth))
-                          : SizedBox()),
-                ),
-                Text('${share?.summary}'),
-                GestureDetector(
-                  onTap: () => _launchUrl(uri),
-                  child: Text(
-                    '下载链接(点击获取)',
-                    style: linkText.copyWith(fontSize: 23),
+                      SizedBox(height: 20),
+                      FloatingActionButton(
+                        heroTag: 'reject',
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (_) => BeautifulAlertDialog(
+                            title: 'REJECT',
+                            tip: '该分享将不被通过',
+                            tapOk: () {
+                              _auditShare('REJECT', 'fail', false)
+                                  .then((_) => Navigator.pop(context, true));
+                            },
+                          ),
+                        ),
+                        backgroundColor: Colors.red,
+                        child: Icon(
+                          Icons.close,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Text('密码： $password', style: linkText.copyWith(fontSize: 23)),
-                SizedBox(height: 30),
-                Offstage(
-                  offstage: SpUtils.getString('roles') != 'admin',
-                  child: Text('状态：${share?.auditStatus}',
-                      style: TextStyle(fontSize: 25, color: Colors.red)),
-                ),
-              ],
-            ),
-
-            /// 管理员审核
-            Positioned(
-              bottom: 40,
-              right: 10,
-              child: Offstage(
-                offstage: SpUtils.getString('roles') != 'admin',
-                child: Column(
-                  children: [
-                    FloatingActionButton(
-                      heroTag: 'pass',
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (_) => BeautifulAlertDialog(
-                          title: 'PASS',
-                          tip: '点击 Ok 后将提交通过请求',
-                          tapOk: () {
-                            _auditShare('PASS', 'succeed', true)
-                                .then((_) => Navigator.pop(context, true));
-                          },
-                        ),
-                      ),
-                      backgroundColor: Config.primaryColor,
-                      child: Icon(Icons.done),
-                    ),
-                    SizedBox(height: 20),
-                    FloatingActionButton(
-                      heroTag: 'reject',
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (_) => BeautifulAlertDialog(
-                          title: 'REJECT',
-                          tip: '该分享将不被通过',
-                          tapOk: () {
-                            _auditShare('REJECT', 'fail', false)
-                                .then((_) => Navigator.pop(context, true));
-                          },
-                        ),
-                      ),
-                      backgroundColor: Colors.red,
-                      child: Icon(
-                        Icons.close,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:share_app/constant.dart';
 import 'package:share_app/pages/audit_page.dart';
 import 'package:share_app/pages/bonus_detail_page.dart';
 import 'package:share_app/pages/contributors_page.dart';
@@ -17,16 +20,19 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Request request = Request();
 
 void main() async {
+  // 保持启动画面
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // 请求单例初始化
   request.init(
-    // baseUrl: 'http://api.w2gd.top:10001/api/v1/', // 远程环境
-    baseUrl: 'http://localhost:10001/api/v1/', // 本地环境
-    // baseUrl: 'https://875c-221-226-155-12.jp.ngrok.io/api/v1/', // 内网地址穿透
+    baseUrl: baseUrlLocal,
     responseFormat: HttpResponseFormat('code', 'data', 'msg', '1'),
   );
-  WidgetsFlutterBinding.ensureInitialized();
   await SpUtils.getInstance();
-
+  // 启动
   runApp(const MyApp());
+  // 删除启动画面
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
@@ -34,12 +40,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Share App',
-      theme: defaultTheme,
-      initialRoute: 'index',
-      onGenerateRoute: onGenerateRoute,
+    return ScreenUtilInit(
+      designSize: const Size(430, 932),
+      minTextAdapt: true,
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Share App',
+        theme: defaultTheme,
+        initialRoute: 'index',
+        onGenerateRoute: onGenerateRoute,
+      ),
     );
   }
 }

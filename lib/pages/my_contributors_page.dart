@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_app/common/config.dart';
 import 'package:share_app/main.dart';
 import 'package:share_app/pages/share_detail.dart';
@@ -32,7 +33,7 @@ class MyContributorsPage extends StatelessWidget {
 
   Widget _buildSliverAppBar() {
     return SliverAppBar(
-      expandedHeight: 190,
+      expandedHeight: 190.h,
       leading: BackButton(color: Colors.white),
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
@@ -91,24 +92,37 @@ class _MySharesListState extends State<_MySharesList> {
             child: Center(child: Text('你还没有投稿涅')),
           )
         : SliverFixedExtentList(
-            itemExtent: 100,
-            delegate: SliverChildBuilderDelegate(childCount: list.length, (_, int index) {
-              final share = list[index];
-              return Container(
-                  padding: EdgeInsets.all(15),
+            itemExtent: 100.h,
+            delegate: SliverChildBuilderDelegate(
+              childCount: list.length,
+              (_, int index) {
+                final share = list[index];
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
                   child: Container(
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom:
-                                  BorderSide(width: 1, color: Config.primarySwatchColor.shade100))),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => ShareDetail(id: share.id)));
-                        },
-                        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Image.network(share.cover, width: 100),
-                          SizedBox(width: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1,
+                          color: Config.primarySwatchColor.shade100,
+                        ),
+                      ),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => ShareDetail(id: share.id)));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            share.cover,
+                            width: 100.w,
+                            height: 80.h,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          SizedBox(width: 10.w),
                           Expanded(
                             child: Text(
                               share.title,
@@ -117,15 +131,19 @@ class _MySharesListState extends State<_MySharesList> {
                           ),
                           Container(
                             alignment: Alignment.centerRight,
-                            width: 100,
+                            width: 100.w,
                             child: Text(
                               shareStatus(share.auditStatus),
-                              style: TextStyle(color: Colors.grey, fontSize: 16),
+                              style: TextStyle(color: Colors.grey, fontSize: 16.sp),
                             ),
                           )
-                        ]),
-                      )));
-            }),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           );
   }
 }

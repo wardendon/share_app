@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_app/common/config.dart';
 import 'package:share_app/main.dart';
@@ -30,10 +31,13 @@ class ContributorsPage extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Column(
-            children: const [
+            children: [
               ListTile(
                 leading: Icon(Icons.tips_and_updates),
-                subtitle: Text('说明:投稿审核通过后会有积分奖励；资源被下载会有积分奖励，提交的资源不得包含广告，侵权信息，百度盘地址建议有密码。'),
+                subtitle: Text(
+                  '说明:投稿审核通过后会有积分奖励；资源被下载会有积分奖励，提交的资源不得包含广告，侵权信息，百度盘地址建议有密码。',
+                  style: TextStyle(fontSize: 18.sp),
+                ),
               ),
               SizedBox(height: 20),
               ShareForm(),
