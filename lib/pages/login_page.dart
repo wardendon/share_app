@@ -46,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
 
     /// 获取用户信息并存储
     request.get('users/${res['id']}', headers: {'X-Token': res['token']}).then((data) {
-      // print(data);
       User user = User.fromJson(data);
       SpUtils.setInt('id', user.id);
       SpUtils.setString('mobile', user.mobile);

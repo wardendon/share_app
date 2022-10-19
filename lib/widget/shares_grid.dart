@@ -122,7 +122,7 @@ class _SharesGridState extends State<SharesGrid> {
                     return Column(
                       children: [
                         SizedBox(
-                          height: 300,
+                          height: 250,
                           child: Swiper(
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(

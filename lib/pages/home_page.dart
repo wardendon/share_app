@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_app/common/config.dart';
 import 'package:share_app/pages/personal_center.dart';
-import 'package:share_app/pages/share_list.dart';
+import 'package:share_app/pages/share_search.dart';
 import 'package:share_app/widget/fancy_tab_bar.dart';
 
 import '../utils/SpUtils.dart';
@@ -23,7 +23,7 @@ class IndexTab extends StatefulWidget {
 class _IndexTab extends State<IndexTab> {
   int selectedIndex = 1;
   List containerList = [
-    ShareList(),
+    ShareSearch(),
     HomePage(),
     PersonalCenter(),
   ];

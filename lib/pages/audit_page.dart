@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_app/common/config.dart';
 import 'package:share_app/common/text_styles.dart';
@@ -164,10 +165,11 @@ class _AuditStatusListState extends State<AuditStatusList> {
                         });
                       },
                       child: Container(
-                        height: 200,
+                        height: 200.h,
                         margin: EdgeInsets.all(10),
                         padding: EdgeInsets.all(1),
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(30.r)),
                           image: DecorationImage(
                               image: AssetImage('assets/images/box${index % 4}.png'),
                               fit: BoxFit.fill),
@@ -187,14 +189,14 @@ class _AuditStatusListState extends State<AuditStatusList> {
                                       contents[index].title,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(color: Colors.white, fontSize: 20),
+                                      style: TextStyle(color: Colors.white, fontSize: 23.sp),
                                     ),
                                     Text(
                                       contents[index].summary,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 3,
                                       softWrap: true,
-                                      style: const TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.white, fontSize: 18.sp),
                                     ),
                                   ],
                                 ),
@@ -208,7 +210,9 @@ class _AuditStatusListState extends State<AuditStatusList> {
                                       children: [
                                         Image.network(
                                           contents[index].cover,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fitWidth,
+                                          width: 200.w,
+                                          height: 150.h,
                                         )
                                       ],
                                     ),
@@ -232,7 +236,7 @@ class _AuditStatusListState extends State<AuditStatusList> {
                                       right: 0,
                                       child: Text(
                                         '${contents[index].price}积分',
-                                        style: TextStyle(color: Colors.pink, fontSize: 20),
+                                        style: TextStyle(color: Colors.pink, fontSize: 25.sp),
                                       ),
                                     )
                                   ],
