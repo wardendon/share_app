@@ -156,13 +156,13 @@ class _AuditStatusListState extends State<AuditStatusList> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        () => Get.toNamed('/detail', arguments: contents[index].id)?.then((value) {
-                              setState(() {
-                                if (value) {
-                                  _onRefresh();
-                                }
-                              });
-                            });
+                        Get.toNamed('/detail', arguments: contents[index].id)?.then((value) {
+                          setState(() {
+                            if (value) {
+                              _onRefresh();
+                            }
+                          });
+                        });
                       },
                       child: Container(
                         height: 200.h,

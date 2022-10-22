@@ -1,7 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:share_app/app/modules/personal/controllers/personal_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../main.dart';
@@ -21,6 +23,7 @@ class DetailView extends StatefulWidget {
 
 class _ShareDetailState extends State<DetailView> {
   var id = Get.arguments;
+  var canShow = Get.parameters['can'];
   Share? share;
   String? nickname;
   String avatar = '';
@@ -28,6 +31,9 @@ class _ShareDetailState extends State<DetailView> {
   String uri = '';
   String password = '';
   String? token = SpUtils.getString('token') ?? '';
+  // 是否兑换过（有查看资格）
+  // final url = Get.parameters['url'];
+  // bool exchanged = Get.parameters['url'] == '' ? false : true;
 
   _launchUrl(u) async {
     if (!await launchUrl(Uri.parse(u))) {
@@ -59,6 +65,38 @@ class _ShareDetailState extends State<DetailView> {
         data: {'id': share?.id, 'shareAuditEnums': type, 'reason': reason, 'showFlag': show});
   }
 
+  /// 兑换
+  Future exchange() async {
+    await request
+        .post('shares/exchange', params: {'shareId': id}, headers: {'X-Token': token})
+        .then((value) => {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    var c = Get.find<PersonalController>();
+                    c.updateBonus();
+                    return Dialog(
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(20),
+                        height: 230.h,
+                        width: 240.w,
+                        child: GestureDetector(
+                          onTap: () => _launchUrl(uri),
+                          child: Text(
+                            '$downloadUrl(点击跳转到网盘)',
+                            style: linkText.copyWith(fontSize: 20.sp),
+                          ),
+                        ),
+                      ),
+                    );
+                  })
+            })
+        .catchError((_) {
+          Get.snackbar('获取失败', '积分不足，请充值');
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -80,8 +118,9 @@ class _ShareDetailState extends State<DetailView> {
           child: Stack(
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${share?.title}', style: const TextStyle(fontSize: 30)),
+                  Align(child: Text('${share?.title}', style: TextStyle(fontSize: 30.sp))),
                   ListTile(
                     title: Text('$nickname'),
                     leading: avatar != ''
@@ -92,7 +131,6 @@ class _ShareDetailState extends State<DetailView> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
                     width: MediaQuery.of(context).size.width,
-                    // color: Colors.cyan,
                     child: Material(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -102,28 +140,53 @@ class _ShareDetailState extends State<DetailView> {
                             ? Center(child: Image.network('${share?.cover}', fit: BoxFit.fitWidth))
                             : const SizedBox()),
                   ),
-                  Text('${share?.summary}'),
-                  GestureDetector(
-                    onTap: () => _launchUrl(uri),
-                    child: Text(
-                      '下载链接(点击获取)',
-                      style: linkText.copyWith(fontSize: 23),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${share?.summary}', style: TextStyle(fontSize: 20.sp)),
+                      Text(
+                        '所需积分： ${share?.price}',
+                        style: TextStyle(fontSize: 30.sp, color: Colors.green),
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () => exchange(),
+                          style: TextButton.styleFrom(
+                            backgroundColor: Config.primarySwatchColor,
+                          ),
+                          child: Text(
+                            '获取链接',
+                            style: TextStyle(color: Colors.white, fontSize: 20.sp),
+                          ),
+                        ),
+                      )
+                      // Text('${Get.parameters['url']}'),
+                    ],
                   ),
-                  Text('密码： $password', style: linkText.copyWith(fontSize: 23)),
-                  const SizedBox(height: 30),
+                  SizedBox(height: 30.h),
                   Offstage(
                     offstage: SpUtils.getString('roles') != 'admin',
-                    child: Text('状态：${share?.auditStatus}',
-                        style: const TextStyle(fontSize: 25, color: Colors.red)),
+                    child: Column(
+                      children: [
+                        Text('状态：${share?.auditStatus}',
+                            style: TextStyle(fontSize: 25.sp, color: Colors.red)),
+                        GestureDetector(
+                          onTap: () => _launchUrl(uri),
+                          child: Text(
+                            '$downloadUrl(点击跳转到网盘)',
+                            style: linkText.copyWith(fontSize: 20.sp),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
 
               /// 管理员审核
               Positioned(
-                bottom: 40,
-                right: 10,
+                bottom: 10.h,
+                right: 10.h,
                 child: Offstage(
                   offstage: SpUtils.getString('roles') != 'admin',
                   child: Column(
@@ -142,9 +205,9 @@ class _ShareDetailState extends State<DetailView> {
                           ),
                         ),
                         backgroundColor: Config.primaryColor,
-                        child: const Icon(Icons.done),
+                        child: const Icon(Icons.done, color: Colors.white),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       FloatingActionButton(
                         heroTag: 'reject',
                         onPressed: () => showDialog(
@@ -159,7 +222,7 @@ class _ShareDetailState extends State<DetailView> {
                           ),
                         ),
                         backgroundColor: Colors.red,
-                        child: const Icon(Icons.close),
+                        child: const Icon(Icons.close, color: Colors.white),
                       ),
                     ],
                   ),

@@ -31,9 +31,11 @@ class PersonalController extends GetxController {
     ));
   }
 
-  _getBonus() async {
+  /// 获取积分更新状态与本地数据
+  updateBonus() async {
     var data = await request.get('users/bonus', params: {"id": SpUtils.getInt('id')});
     user.update((user) => user?.bonus = data['bonus']);
+    SpUtils.setInt('bonus', data['bonus']);
   }
 
   final nicknameController = TextEditingController();
