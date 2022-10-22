@@ -19,8 +19,12 @@ class SearchController extends GetxController {
     Map<String, dynamic> formData = {
       'summary': searchController.text,
     };
-    var data = await request.post('shares/all',
-        params: {'pageNum': 0, 'pageSize': 20}, data: formData, headers: {'X-ToKen': token});
+    var data = await request
+        .post('shares/all',
+            params: {'pageNum': 0, 'pageSize': 20}, data: formData, headers: {'X-ToKen': token})
+        .catchError((_) {
+      Get.snackbar('网络异常', '请重试');
+    });
 
     ShareListModel shareList = ShareListModel.fromJson({'data': data['content']});
     list.value = shareList.data;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_app/app/common/config.dart';
 
 import '../../../common/text_styles.dart';
 import '../../../widget/share_list.dart';
@@ -30,7 +31,14 @@ class SearchView extends GetView<SearchController> {
                       }),
                 )
               : Center(
-                  child: Text("哥们，搜点啥？...", style: incorrectMessageStyle.copyWith(fontSize: 40))),
+                  child: Text(
+                    "哥们，搜点啥？...",
+                    style: incorrectMessageStyle.copyWith(
+                      fontSize: 40,
+                      color: Config.primarySwatchColor,
+                    ),
+                  ),
+                ),
         );
       }),
     );

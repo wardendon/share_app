@@ -4,7 +4,9 @@ import 'package:share_app/app/modules/home/views/detail_view.dart';
 import 'package:share_app/app/modules/home/views/layout.dart';
 import 'package:share_app/app/modules/login/bindings/login_binding.dart';
 import 'package:share_app/app/modules/login/views/login_view.dart';
+import 'package:share_app/app/modules/personal/controllers/bonus_controller.dart';
 import 'package:share_app/app/modules/personal/controllers/contribute_controller.dart';
+import 'package:share_app/app/modules/personal/controllers/exchange_controller.dart';
 import 'package:share_app/app/modules/personal/views/bonus_view.dart';
 import 'package:share_app/app/modules/personal/views/contributors_view.dart';
 import 'package:share_app/app/modules/personal/views/edit_view.dart';
@@ -42,12 +44,13 @@ class AppPages {
       page: () => const PersonalView(),
       children: [
         GetPage(
-            name: '/my',
-            page: () => const MyContributorsView(),
-            middlewares: [RouteAuthMiddleware()],
-            binding: BindingsBuilder(() {
-              Get.lazyPut(() => ContributeController());
-            })),
+          name: '/my',
+          page: () => const MyContributorsView(),
+          middlewares: [RouteAuthMiddleware()],
+          binding: BindingsBuilder(() {
+            Get.lazyPut(() => ContributeController());
+          }),
+        ),
         GetPage(name: '/contribute', page: () => const ContributorsView()),
         GetPage(
           name: '/edit',
@@ -59,8 +62,20 @@ class AppPages {
           page: () => const SettingView(),
           middlewares: [RouteAuthMiddleware()],
         ),
-        GetPage(name: '/bonus', page: () => const BonusView()),
-        GetPage(name: '/exchange', page: () => const ExchangeView()),
+        GetPage(
+          name: '/bonus',
+          page: () => const BonusView(),
+          binding: BindingsBuilder(() {
+            Get.lazyPut(() => BonusController());
+          }),
+        ),
+        GetPage(
+          name: '/exchange',
+          page: () => const ExchangeView(),
+          binding: BindingsBuilder(() {
+            Get.lazyPut(() => ExchangeController());
+          }),
+        ),
       ],
     ),
     GetPage(
