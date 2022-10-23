@@ -31,9 +31,6 @@ class _ShareDetailState extends State<DetailView> {
   String uri = '';
   String password = '';
   String? token = SpUtils.getString('token') ?? '';
-  // 是否兑换过（有查看资格）
-  // final url = Get.parameters['url'];
-  // bool exchanged = Get.parameters['url'] == '' ? false : true;
 
   _launchUrl(u) async {
     if (!await launchUrl(Uri.parse(u))) {

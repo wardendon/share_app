@@ -28,6 +28,8 @@ void main() async {
         debugShowCheckedModeBanner: false,
         title: 'Share App',
         theme: defaultTheme,
+        darkTheme: appDarkTheme,
+        themeMode: ThemeMode.light,
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
       ),

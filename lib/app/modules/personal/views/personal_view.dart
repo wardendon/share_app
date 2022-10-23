@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_app/app/common/themes.dart';
 import 'package:share_app/app/modules/personal/views/audit_view.dart';
 
 import '../../../common/config.dart';
@@ -19,7 +20,10 @@ class PersonalView extends GetView<PersonalController> {
       appBar: AppBar(
         leading: const Text(''),
         actions: [
-          const Icon(Icons.dark_mode_outlined),
+          InkWell(
+            child: Icon(Get.isDarkMode ? Icons.dark_mode : Icons.dark_mode_outlined),
+            onTap: () => Get.changeTheme(Get.isDarkMode ? defaultTheme : appDarkTheme),
+          ),
           // Icon(Icons.dark_mode),
           const SizedBox(width: 10),
           InkWell(

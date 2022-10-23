@@ -30,9 +30,17 @@ class SearchController extends GetxController {
     list.value = shareList.data;
   }
 
+  /// 配合 interval 防抖限流
+  final _count = 0.obs;
+  add() => _count.value++;
+
   @override
   void onInit() {
     super.onInit();
+    // 更改后一秒回调
+    debounce(_count, (value) {
+      getList();
+    }, time: const Duration(seconds: 1));
   }
 
   @override

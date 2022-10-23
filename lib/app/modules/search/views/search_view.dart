@@ -48,9 +48,12 @@ class SearchView extends GetView<SearchController> {
   Widget _searchBar(BuildContext context) {
     return TextField(
       controller: controller.searchController,
-      onSubmitted: (v) {
-        controller.getList();
+      onChanged: (v) {
+        controller.add();
       },
+      // onSubmitted: (v) {
+      //   controller.getList();
+      // },
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         border: OutlineInputBorder(

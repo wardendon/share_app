@@ -39,3 +39,9 @@ ThemeData buildDefaultTheme() {
     ),
   );
 }
+
+ThemeData appDarkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: Colors.red,
+  scaffoldBackgroundColor: Colors.black,
+);
